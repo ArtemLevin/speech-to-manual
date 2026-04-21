@@ -15,6 +15,7 @@ from speech_to_manual.domain.errors import LlmGenerationError
 class StageLlmConfig:
     model: str
     num_predict: int
+    response_format: str | None = None
 
 
 class OllamaLangChainBackend:
@@ -24,7 +25,11 @@ class OllamaLangChainBackend:
         self._stage_map: dict[StageName, StageLlmConfig] = {
             StageName.CLEAN: StageLlmConfig(config.models.clean, config.num_predict.clean),
             StageName.PLAN_SOURCE: StageLlmConfig(config.models.plan, config.num_predict.plan_prep),
-            StageName.PLAN_JSON: StageLlmConfig(config.models.plan, config.num_predict.plan),
+            StageName.PLAN_JSON: StageLlmConfig(
+                config.models.plan,
+                config.num_predict.plan,
+                response_format="json",
+            ),
             StageName.DRAFT: StageLlmConfig(config.models.draft, config.num_predict.draft),
             StageName.LATEX: StageLlmConfig(config.models.latex, config.num_predict.latex),
             StageName.LATEX_FIX: StageLlmConfig(config.models.latex_fix, config.num_predict.latex_fix),
@@ -36,12 +41,18 @@ class OllamaLangChainBackend:
             ("system", "{system_prompt}"),
             ("user", "{user_prompt}"),
         ])
+        llm_kwargs: dict[str, str | int | float | bool] = {
+            "model": stage_cfg.model,
+            "base_url": self._base_url,
+            "temperature": self._temperature,
+            "reasoning": False,
+            "num_predict": stage_cfg.num_predict,
+        }
+        if stage_cfg.response_format:
+            llm_kwargs["format"] = stage_cfg.response_format
+
         llm = ChatOllama(
-            model=stage_cfg.model,
-            base_url=self._base_url,
-            temperature=self._temperature,
-            reasoning=False,
-            num_predict=stage_cfg.num_predict,
+            **llm_kwargs,
         )
         chain = prompt | llm | StrOutputParser()
         try:
