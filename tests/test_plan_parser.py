@@ -36,3 +36,19 @@ def test_plan_parser_missing_required() -> None:
 def test_plan_parser_no_json() -> None:
     with pytest.raises(JsonRepairError):
         JsonPlanParser.parse_and_validate("hello")
+
+
+def test_plan_parser_python_dict_repair() -> None:
+    python_style = """{
+      'title': 'T',
+      'topic': 'X',
+      'audience': 'Y',
+      'goal': 'Z',
+      'sections': [
+        {'id': 's1', 'title': 'Sec', 'purpose': 'P', 'subsections': ['a']}
+      ],
+      'practice_block': {'needed': True, 'format': 'quiz'},
+      'answers_block': {'needed': True, 'format': 'short'},
+    }"""
+    plan = JsonPlanParser.parse_and_validate(python_style)
+    assert plan.topic == "X"
