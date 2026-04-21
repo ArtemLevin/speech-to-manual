@@ -1,0 +1,523 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{margin=2.1cm}
+\onehalfspacing
+\hypersetup{hidelinks}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{lightaccent}{HTML}{EAF6F6}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{darkaccent}{Чек-лист по теме занятия}}
+\fancyhead[R]{\textcolor{darkaccent}{ЕГЭ}}
+\fancyfoot[C]{\thepage}
+
+\setlength{\headheight}{15pt}
+\setlist[itemize]{leftmargin=1.4cm}
+\setlist[enumerate]{leftmargin=1.4cm}
+
+\tkzSetUpLine[line width=0.9pt, color=accent]
+\tkzSetUpPoint[color=accent, fill=accent, size=3]
+\tkzSetUpLabel[color=black, font=\small]
+
+\newcommand{\topic}{Окружность, вписанные углы, дуги, теорема синусов, тригонометрия в прямоугольном треугольнике и отношения площадей}
+\newcommand{\studentname}{Тимофея Васильченко}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.2cm}
+
+{\fontsize{24}{28}\selectfont\bfseries \textcolor{darkaccent}{Чек-лист}}\\[0.5cm]
+{\Large \textcolor{textgray}{\topic}}\\[1.6cm]
+
+{\large Лёвин Артём Александрович}\\[0.2cm]
+{\large эксклюзивно для \studentname}\\[1.2cm]
+
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[scale=1]
+\draw[line width=1.2pt, color=accent]
+(0,0) .. controls (2.2,0.85) and (4.2,-0.25) ..
+(6.4,0.45) .. controls (8.2,1.05) and (10.4,-0.55) ..
+(12.6,0.2);
+\draw[line width=0.8pt, color=darkaccent]
+(0.4,-0.35) .. controls (2.5,0.15) and (4.1,-0.7) ..
+(6.3,-0.2) .. controls (8.8,0.3) and (10.6,-0.15) ..
+(12.2,-0.45);
+\end{tikzpicture}
+
+\end{center}
+\end{titlepage}
+
+\section*{1. Что было на занятии}
+
+На занятии разбирались четыре тесно связанные идеи:
+
+\begin{enumerate}
+    \item связь \textbf{вписанных углов} и \textbf{дуг окружности};
+    \item формулы для \textbf{углов, образованных хордами, секущими и касательной};
+    \item применение \textbf{теоремы синусов} через радиус описанной окружности;
+    \item базовая \textbf{тригонометрия в прямоугольном треугольнике} и \textbf{отношения площадей} в подобных конфигурациях.
+\end{enumerate}
+
+\section*{2. Базовые обозначения и определения}
+
+\begin{itemize}
+    \item \textbf{Хорда} --- отрезок, соединяющий две точки окружности.
+    \item \textbf{Секущая} --- прямая, пересекающая окружность в двух точках.
+    \item \textbf{Касательная} --- прямая, имеющая с окружностью одну общую точку.
+    \item \textbf{Дуга} --- часть окружности между двумя точками.
+    \item \textbf{Вписанный угол} --- угол с вершиной на окружности, стороны которого пересекают окружность.
+    \item \textbf{Описанная окружность треугольника} --- окружность, проходящая через все вершины треугольника.
+    \item \textbf{Средняя линия треугольника} --- отрезок, соединяющий середины двух сторон треугольника.
+\end{itemize}
+
+\section*{3. Окружность: углы и дуги}
+
+\subsection*{3.1. Главное правило}
+
+\[
+\text{вписанный угол}=\frac12\cdot \text{дуга, на которую он опирается}.
+\]
+
+Отсюда сразу следует:
+
+\begin{itemize}
+    \item если два вписанных угла опираются на одну и ту же дугу, то они \textbf{равны};
+    \item если известен вписанный угол, то соответствующая дуга в \textbf{2 раза больше};
+    \item если известна дуга, то соответствующий вписанный угол в \textbf{2 раза меньше}.
+\end{itemize}
+
+\subsection*{3.2. Очень полезное следствие}
+
+Если точки \(A,B,C,D\) лежат на одной окружности, то углы
+\[
+\angle ABC \quad \text{и} \quad \angle ADC
+\]
+опираются на одну и ту же дугу \(AC\), поэтому
+\[
+\angle ABC=\angle ADC.
+\]
+
+\subsection*{3.3. Мини-рисунок к правилу}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+\tkzDefPoint(0,0){O}
+\tkzDefPoint(2.8,0){A}
+\tkzDrawCircle(O,A)
+\tkzDefPointBy[rotation=center O angle 130](A)\tkzGetPoint{B}
+\tkzDefPointBy[rotation=center O angle 235](A)\tkzGetPoint{C}
+\tkzDefPointBy[rotation=center O angle 300](A)\tkzGetPoint{D}
+\tkzDrawSegments(A,B B,C C,A A,D D,C)
+\tkzDrawPoints(A,B,C,D)
+\tkzLabelPoints[above](B)
+\tkzLabelPoints[right](A)
+\tkzLabelPoints[left](C)
+\tkzLabelPoints[below right](D)
+\tkzMarkAngle[size=0.55](A,B,C)
+\tkzMarkAngle[size=0.55](A,D,C)
+\tkzLabelAngle[pos=0.8](A,B,C){\small \(\angle ABC\)}
+\tkzLabelAngle[pos=0.9](A,D,C){\small \(\angle ADC\)}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{3.4. Алгоритм для типовой задачи}
+
+Если нужно найти вписанный угол:
+
+\begin{enumerate}
+    \item определите, на какую дугу он опирается;
+    \item выразите нужную дугу через известные углы или дуги;
+    \item разделите дугу пополам.
+\end{enumerate}
+
+\subsection*{3.5. Короткий пример}
+
+Если \(\angle ABD=73^\circ\), \(\angle DAC=55^\circ\), а \(A,B,C,D\) лежат на одной окружности, то
+\[
+\angle ADC=\angle ADB+\angle DAC=73^\circ+55^\circ=128^\circ.
+\]
+Так как \(\angle ABC\) и \(\angle ADC\) опираются на дугу \(AC\), имеем
+\[
+\angle ABC=128^\circ.
+\]
+
+\section*{4. Формулы для углов в окружности}
+
+\subsection*{4.1. Угол между двумя хордами, пересекающимися внутри окружности}
+
+Если хорды пересекаются внутри окружности, то угол между ними равен \textbf{полусумме} соответствующих дуг:
+\[
+\angle = \frac12\bigl(\overset{\frown}{\alpha}+\overset{\frown}{\beta}\bigr).
+\]
+
+\textbf{Смысл:} берём дугу, на которую смотрит одна сторона угла, и дугу, на которую смотрит вертикальный угол, складываем и делим пополам.
+
+\subsection*{4.2. Угол между двумя секущими с вершиной вне окружности}
+
+\[
+\angle = \frac12\bigl(\text{большая дуга} - \text{меньшая дуга}\bigr).
+\]
+
+\subsection*{4.3. Угол между касательной и секущей}
+
+\[
+\angle = \frac12\bigl(\text{большая дуга} - \text{меньшая дуга}\bigr).
+\]
+
+\subsection*{4.4. Угол между касательной и хордой}
+
+Если угол образован касательной и хордой, то он равен половине дуги, заключённой внутри этого угла:
+\[
+\angle = \frac12\,\overset{\frown}{BC}.
+\]
+
+\subsection*{4.5. Что важно не перепутать}
+
+\begin{itemize}
+    \item \textbf{внутри окружности} --- обычно \textbf{полусумма};
+    \item \textbf{вне окружности} --- обычно \textbf{полуразность};
+    \item \textbf{вписанный угол} --- \textbf{половина дуги};
+    \item \textbf{дуга} --- \textbf{в два раза больше} соответствующего вписанного угла.
+\end{itemize}
+
+\section*{5. Теорема синусов и радиус описанной окружности}
+
+\subsection*{5.1. Формула}
+
+Для треугольника со сторонами \(a,b,c\), противолежащими углам \(\alpha,\beta,\gamma\), верно:
+\[
+\frac{a}{\sin\alpha}=\frac{b}{\sin\beta}=\frac{c}{\sin\gamma}=2R,
+\]
+где \(R\) --- радиус описанной окружности.
+
+\subsection*{5.2. Когда это особенно удобно}
+
+Эта формула полезна, если в задаче одновременно встречаются:
+
+\begin{itemize}
+    \item хорда;
+    \item радиус окружности;
+    \item угол, опирающийся на эту хорду.
+\end{itemize}
+
+Тогда для стороны \(a\), лежащей против угла \(\alpha\), сразу можно писать:
+\[
+a=2R\sin\alpha.
+\]
+
+\subsection*{5.3. Короткий пример}
+
+Пусть радиус окружности равен \(\sqrt6\), а хорда равна \(3\sqrt2\). Тогда
+\[
+3\sqrt2=2\sqrt6\sin\alpha.
+\]
+Следовательно,
+\[
+\sin\alpha=\frac{3\sqrt2}{2\sqrt6}
+=\frac{3}{2\sqrt3}
+=\frac{\sqrt3}{2}.
+\]
+Значит,
+\[
+\alpha=60^\circ \quad \text{или} \quad 120^\circ.
+\]
+Если по условию нужен \textbf{тупой} угол, то
+\[
+\alpha=120^\circ.
+\]
+
+\subsection*{5.4. Типовая ошибка}
+
+Нельзя забывать, что одному и тому же значению синуса в промежутке от \(0^\circ\) до \(180^\circ\) обычно соответствуют \textbf{два угла}:
+\[
+\alpha \quad \text{и} \quad 180^\circ-\alpha.
+\]
+Нужно обязательно сверяться с условием: острый угол или тупой.
+
+\section*{6. Тригонометрия в прямоугольном треугольнике}
+
+\subsection*{6.1. Базовые формулы}
+
+В прямоугольном треугольнике:
+
+\[
+\sin\alpha=\frac{\text{противолежащий катет}}{\text{гипотенуза}},
+\qquad
+\cos\alpha=\frac{\text{прилежащий катет}}{\text{гипотенуза}},
+\qquad
+\tg\alpha=\frac{\text{противолежащий катет}}{\text{прилежащий катет}}.
+\]
+
+\subsection*{6.2. Теорема Пифагора}
+
+\[
+c^2=a^2+b^2,
+\]
+где \(c\) --- гипотенуза.
+
+\subsection*{6.3. Как действовать в задачах}
+
+\begin{enumerate}
+    \item Сначала расшифруйте синус, косинус или тангенс как отношение сторон.
+    \item Затем найдите недостающую сторону или отношение сторон.
+    \item После этого при необходимости примените теорему Пифагора.
+\end{enumerate}
+
+\subsection*{6.4. Если дана только пропорция}
+
+Если, например,
+\[
+\cos\alpha=\frac{2\sqrt5}{5},
+\]
+то это не значит, что прилежащий катет равен \(2\sqrt5\), а гипотенуза равна \(5\).
+
+Это значит только, что стороны \textbf{относятся как}
+\[
+2\sqrt5 : 5.
+\]
+Поэтому удобно вводить параметр:
+\[
+\text{катет}=2\sqrt5\,x,\qquad \text{гипотенуза}=5x.
+\]
+
+\subsection*{6.5. Мини-рисунок}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\tkzDefPoint(0,0){C}
+\tkzDefPoint(4,0){A}
+\tkzDefPoint(0,2.6){B}
+\tkzDrawPolygon(A,B,C)
+\tkzMarkRightAngle[size=0.35](A,C,B)
+\tkzMarkAngle[size=0.6](B,A,C)
+\tkzLabelAngle[pos=0.9](B,A,C){\(\alpha\)}
+\tkzDrawPoints(A,B,C)
+\tkzLabelPoints[below](C,A)
+\tkzLabelPoints[left](B)
+\end{tikzpicture}
+\end{center}
+
+Для угла \(\alpha=\angle BAC\):
+\[
+\sin\alpha=\frac{BC}{AB},\qquad
+\cos\alpha=\frac{AC}{AB},\qquad
+\tg\alpha=\frac{BC}{AC}.
+\]
+
+\section*{7. Площади в треугольнике}
+
+\subsection*{7.1. Формула площади через две стороны и угол между ними}
+
+\[
+S=\frac12 ab\sin\gamma.
+\]
+
+\subsection*{7.2. Важный метод: делить одну площадь на другую}
+
+Если у двух треугольников есть общий угол, удобно писать формулы площади и \textbf{делить одну на другую}. Тогда синусы общих углов сокращаются, и задача резко упрощается.
+
+\subsection*{7.3. Средняя линия в треугольнике}
+
+Если \(MK\) --- средняя линия треугольника \(ABC\), то
+\[
+MK\parallel AC,\qquad BM=\frac{BA}{2},\qquad BK=\frac{BC}{2}.
+\]
+
+Отсюда для маленького треугольника \(BMK\) и большого треугольника \(BAC\):
+\[
+\frac{S_{BMK}}{S_{BAC}}
+=
+\frac{\frac12 \cdot BM \cdot BK \cdot \sin\angle B}{\frac12 \cdot BA \cdot BC \cdot \sin\angle B}
+=
+\frac{BM}{BA}\cdot\frac{BK}{BC}
+=
+\frac12\cdot\frac12
+=
+\frac14.
+\]
+
+Значит,
+\[
+S_{BMK}=\frac14 S_{BAC}.
+\]
+
+\subsection*{7.4. Практический вывод}
+
+Если площадь трапеции между средней линией и основанием равна \(36\), то
+\[
+S_{ABC}=36+\frac14 S_{ABC}.
+\]
+Если обозначить
+\[
+S_{ABC}=x,
+\]
+то
+\[
+x=36+\frac{x}{4},
+\qquad
+\frac{3x}{4}=36,
+\qquad
+x=48.
+\]
+
+\subsection*{7.5. Общая идея для задач на отношения площадей}
+
+Если точки делят стороны в известных отношениях, то площади часто выражаются через \textbf{произведения коэффициентов деления}.
+
+Например, если
+\[
+\frac{BK}{BC}=\frac{2}{5},
+\qquad
+\frac{BT}{BA}=\frac{1}{5},
+\]
+то для треугольников с общим углом при вершине \(B\):
+\[
+\frac{S_{BKT}}{S_{BAC}}
+=
+\frac{BK}{BC}\cdot\frac{BT}{BA}
+=
+\frac{2}{5}\cdot\frac{1}{5}
+=
+\frac{2}{25}.
+\]
+
+\section*{8. Типичные ошибки}
+
+\begin{enumerate}
+    \item Путают, где \textbf{полусумма}, а где \textbf{полуразность} дуг.
+    \item Забывают, что \textbf{вписанный угол} равен половине дуги, а не всей дуге.
+    \item При применении теоремы синусов не учитывают второй угол с тем же синусом.
+    \item В прямоугольном треугольнике путают, какой катет \textbf{противолежащий}, а какой \textbf{прилежащий}.
+    \item По значению синуса или косинуса ошибочно приравнивают стороны напрямую, хотя там дано только \textbf{отношение}.
+    \item В задачах на площади забывают, что сравнивать площади удобно через \textbf{отношение}, а не через громоздкие вычисления.
+    \item Не замечают общий угол и из-за этого не используют формулу
+    \[
+    S=\frac12 ab\sin\gamma.
+    \]
+\end{enumerate}
+
+\section*{9. Краткий алгоритм по теме}
+
+\subsection*{Если задача про окружность}
+\begin{enumerate}
+    \item Найдите дугу, на которую опирается нужный угол.
+    \item Проверьте, не равен ли он другому вписанному углу на той же дуге.
+    \item Если угол внутри окружности --- подумайте о \textbf{полусумме}.
+    \item Если угол вне окружности --- проверьте \textbf{полуразность}.
+\end{enumerate}
+
+\subsection*{Если задача про хорду и радиус}
+\begin{enumerate}
+    \item Используйте формулу
+    \[
+    a=2R\sin\alpha.
+    \]
+    \item Найдите синус угла.
+    \item Проверьте, не нужно ли выбрать \textbf{тупой} угол вместо острого.
+\end{enumerate}
+
+\subsection*{Если задача про прямоугольный треугольник}
+\begin{enumerate}
+    \item Расшифруйте \(\sin\), \(\cos\), \(\tg\).
+    \item При необходимости введите коэффициент \(x\).
+    \item Примените теорему Пифагора.
+\end{enumerate}
+
+\subsection*{Если задача про площади}
+\begin{enumerate}
+    \item Ищите треугольники с \textbf{общим углом}.
+    \item Пишите площади через
+    \[
+    \frac12 ab\sin\gamma.
+    \]
+    \item Делите одну формулу на другую.
+    \item Сокращайте общие множители и получайте отношение площадей.
+\end{enumerate}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+\textbf{Распределение по сложности:} 1--3 --- простые, 4--6 --- средние, 7--9 --- выше среднего, 10 --- сложная.
+
+\begin{enumerate}
+    \item В окружности дан вписанный угол \(41^\circ\), опирающийся на дугу \(AC\). Найдите величину дуги \(AC\) в градусах.
+
+    \item Точки \(A,B,C,D\) лежат на одной окружности. Известно, что \(\angle ADB=37^\circ\) и \(\angle DAC=28^\circ\). Найдите \(\angle ABC\).
+
+    \item Хорда \(BC\) и касательная в точке \(B\) образуют угол \(34^\circ\). Найдите величину дуги \(BC\).
+
+    \item Две секущие, проведённые из одной внешней точки, высекают дуги \(164^\circ\) и \(72^\circ\). Найдите угол между секущими.
+
+    \item Радиус окружности равен \(5\), хорда равна \(5\sqrt2\). Найдите величину \textbf{тупого} вписанного угла, опирающегося на эту хорду.
+
+    \item В прямоугольном треугольнике гипотенуза равна \(10\), а \(\sin\alpha=0{,}6\). Найдите противолежащий катет.
+
+    \item В прямоугольном треугольнике \(\tg\alpha=\dfrac34\), а прилежащий к углу \(\alpha\) катет равен \(12\). Найдите гипотенузу.
+
+    \item В треугольнике \(ABC\) точки \(K\in BC\) и \(T\in BA\). Известно, что \(BK:KC=2:3\), \(BT:TA=1:4\), а площадь треугольника \(ABC\) равна \(150\). Найдите площадь треугольника \(BKT\).
+
+    \item В треугольнике \(ABC\) проведена средняя линия \(MN\parallel AC\). Площадь трапеции \(AMNC\) равна \(54\). Найдите площадь треугольника \(ABC\).
+
+    \item В окружности точки \(A,B,C,D\) расположены в этом порядке. Известно, что \(\angle ABD=52^\circ\) и \(\angle CAD=31^\circ\). Найдите \(\angle ABC\).
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы к тренировочному блоку}
+
+\textbf{Пароль самопроверки:} \textcolor{darkaccent}{ДУГА--СИНУС--ПЛОЩАДЬ}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}c>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(82^\circ\) \\
+2 & \(65^\circ\) \\
+3 & \(68^\circ\) \\
+4 & \(46^\circ\) \\
+5 & \(135^\circ\) \\
+6 & \(6\) \\
+7 & \(15\) \\
+8 & \(12\) \\
+9 & \(72\) \\
+10 & \(83^\circ\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
