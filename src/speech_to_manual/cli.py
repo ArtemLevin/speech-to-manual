@@ -20,6 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("input_path", type=str)
     parser.add_argument("--output-dir", type=str, default=None)
     parser.add_argument("--reference-file", type=str, default=None)
+    parser.add_argument("--student-name", type=str, default="...")
     parser.add_argument("--whisper-model", type=str, default="small")
     parser.add_argument("--language", type=str, default="ru")
     parser.add_argument("--beam-size", type=int, default=5)
@@ -37,6 +38,7 @@ def main() -> None:
         input_path=Path(args.input_path),
         output_dir=Path(args.output_dir) if args.output_dir else None,
         reference_file=Path(args.reference_file) if args.reference_file else None,
+        student_name=args.student_name,
         runtime={
             "ollama_base_url": args.ollama_base_url,
             "temperature": args.temperature,

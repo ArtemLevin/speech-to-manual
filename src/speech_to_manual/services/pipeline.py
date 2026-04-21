@@ -174,47 +174,47 @@ class ManualPipelineOrchestrator:
 
     def _stage_latex(self, draft: str, plan: ManualPlan, reference: str, output_dir: Path) -> str:
         def _call() -> str:
-<<<<<<< codex/conduct-full-code-review-4xf2bt
             raw_local = self._llm.generate(
-=======
-            return self._llm.generate(
->>>>>>> main
+                stage=StageName.LATEX,
+                system_prompt="Ты пишешь чистый компилируемый LaTeX-код учебного пособия.",
+                user_prompt=PromptFactory.latex_user_prompt(
+                    draft_text=draft,
+                    plan=plan,
+                    reference=reference,
+                    student_name=self._config.student_name,
+                ),
+            )
+            return LatexValidator.normalize_fenced_code(raw_local)
+
+        tex = self._retry.run("latex_generate", _call)
+            raw_local = self._llm.generate(
                 stage=StageName.LATEX,
                 system_prompt="Ты пишешь чистый компилируемый LaTeX-код учебного пособия.",
                 user_prompt=PromptFactory.latex_user_prompt(draft, plan, reference),
             )
-<<<<<<< codex/conduct-full-code-review-4xf2bt
             return LatexValidator.normalize_fenced_code(raw_local)
 
         tex = self._retry.run("latex_generate", _call)
-=======
 
-        raw = self._retry.run("latex_generate", _call)
-        tex = LatexValidator.validate(LatexValidator.normalize_fenced_code(raw))
->>>>>>> main
         self._store.write_text(output_dir / "06_manual.tex", tex)
         return tex
 
     def _stage_latex_fix(self, tex_code: str, output_dir: Path) -> str:
         def _call() -> str:
-<<<<<<< codex/conduct-full-code-review-4xf2bt
             raw_local = self._llm.generate(
-=======
-            return self._llm.generate(
->>>>>>> main
+            raw_local = self._llm.generate(
+
                 stage=StageName.LATEX_FIX,
                 system_prompt="Ты исправляешь LaTeX-код и возвращаешь только полный исправленный .tex-файл.",
                 user_prompt=PromptFactory.latex_fix_user_prompt(tex_code),
             )
-<<<<<<< codex/conduct-full-code-review-4xf2bt
             return LatexValidator.validate(LatexValidator.normalize_fenced_code(raw_local))
 
         fixed = self._retry.run("latex_fix", _call)
-=======
+            return LatexValidator.validate(LatexValidator.normalize_fenced_code(raw_local))
 
-        raw = self._retry.run("latex_fix", _call)
-        fixed = LatexValidator.validate(LatexValidator.normalize_fenced_code(raw))
->>>>>>> main
+        fixed = self._retry.run("latex_fix", _call)
+
         self._store.write_text(output_dir / "07_manual_fixed.tex", fixed)
         return fixed
 

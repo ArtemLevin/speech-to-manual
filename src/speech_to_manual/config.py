@@ -77,6 +77,7 @@ class AppConfig(BaseModel):
     input_path: Path
     output_dir: Path | None = None
     reference_file: Path | None = None
+    student_name: str = "..."
     runtime: RuntimeConfig = RuntimeConfig()
     retries: RetryConfig = RetryConfig()
     chunking: ChunkingConfig = ChunkingConfig()
