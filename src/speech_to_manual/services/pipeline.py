@@ -144,16 +144,17 @@ class ManualPipelineOrchestrator:
         return plan_source
 
     def _stage_plan_json(self, plan_source: str, reference: str, output_dir: Path) -> ManualPlan:
-        def _call() -> str:
-            return self._llm.generate(
+        def _call() -> tuple[str, ManualPlan]:
+            raw_local = self._llm.generate(
                 stage=StageName.PLAN_JSON,
                 system_prompt="Ты проектируешь структуру учебного пособия и возвращаешь только JSON.",
                 user_prompt=PromptFactory.plan_json_user_prompt(plan_source, reference),
             )
+            plan_local = JsonPlanParser.parse_and_validate(raw_local)
+            return raw_local, plan_local
 
-        raw = self._retry.run("plan_json", _call)
+        raw, plan = self._retry.run("plan_json", _call)
         self._store.write_text(output_dir / "04_plan_raw.txt", raw)
-        plan = JsonPlanParser.parse_and_validate(raw)
         self._store.write_json(output_dir / "04_plan.json", plan.model_dump())
         return plan
 

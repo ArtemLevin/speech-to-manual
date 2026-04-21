@@ -18,6 +18,9 @@ class JsonPlanParser:
         if fenced_match:
             return fenced_match.group(1).strip()
 
+        if re.search(r"```(?:latex|tex)\s*", raw, re.IGNORECASE):
+            raise JsonRepairError("LLM returned LaTeX code block instead of JSON plan")
+
         first_brace = raw.find("{")
         last_brace = raw.rfind("}")
         if first_brace != -1 and last_brace != -1 and last_brace > first_brace:

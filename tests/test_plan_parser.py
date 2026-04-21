@@ -52,3 +52,9 @@ def test_plan_parser_python_dict_repair() -> None:
     }"""
     plan = JsonPlanParser.parse_and_validate(python_style)
     assert plan.topic == "X"
+
+
+def test_plan_parser_rejects_latex_block() -> None:
+    latex_like = "```latex\\n\\\\documentclass{article}\\n\\\\begin{document}x\\\\end{document}\\n```"
+    with pytest.raises(JsonRepairError):
+        JsonPlanParser.parse_and_validate(latex_like)
