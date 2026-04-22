@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from .domain.enums import PipelineMode
 
@@ -66,8 +67,21 @@ class AudioConfig(BaseModel):
 class RuntimeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    provider: Literal["ollama", "openai_compat"] = "ollama"
     ollama_base_url: str = "http://localhost:11434"
+    api_base_url: str | None = None
+    api_key: str | None = None
     temperature: float = Field(default=0.0, ge=0.0, le=1.0)
+
+    @model_validator(mode="after")
+    def validate_openai_compat_fields(self) -> "RuntimeConfig":
+        if self.provider != "openai_compat":
+            return self
+        if not self.api_base_url:
+            raise ValueError("api_base_url is required when provider=openai_compat")
+        if not self.api_key:
+            raise ValueError("api_key is required when provider=openai_compat")
+        return self
 
 
 class AppConfig(BaseModel):

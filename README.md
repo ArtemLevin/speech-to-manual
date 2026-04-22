@@ -39,3 +39,28 @@ speech-to-manual audio ./audio/slova.mp3 \
   --whisper-model medium \
   --beam-size 8
 ```
+
+## OpenAI-compatible API mode
+
+You can switch from local Ollama to any OpenAI-compatible endpoint.
+
+### Required flags
+
+- `--provider openai_compat`
+- `--api-base-url https://your-provider/v1`
+- `--api-key <token>` or `--api-key-env OPENAI_API_KEY`
+
+### Example
+
+```bash
+export OPENAI_API_KEY="YOUR_TOKEN"
+
+speech-to-manual text_file ./texts/slova.txt \
+  --provider openai_compat \
+  --api-base-url https://api.openai.com/v1 \
+  --model-clean gpt-4.1-mini \
+  --model-plan gpt-4.1 \
+  --model-draft gpt-4.1 \
+  --model-latex gpt-4.1 \
+  --model-latex-fix gpt-4.1
+```

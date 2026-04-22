@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 
 from speech_to_manual.config import AppConfig
 from speech_to_manual.domain.enums import PipelineMode
 from speech_to_manual.infra.fs_store import LocalFileStore
+from speech_to_manual.infra.openai_llm import OpenAICompatLangChainBackend
 from speech_to_manual.infra.ollama_llm import OllamaLangChainBackend
 from speech_to_manual.infra.whisper_stt import WhisperSttBackend
 from speech_to_manual.services.pipeline import ManualPipelineOrchestrator
@@ -42,6 +44,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--num-predict-latex", type=int, default=None)
     parser.add_argument("--num-predict-latex-fix", type=int, default=None)
     parser.add_argument("--ollama-base-url", type=str, default="http://localhost:11434")
+    parser.add_argument("--provider", choices=["ollama", "openai_compat"], default="ollama")
+    parser.add_argument("--api-base-url", type=str, default=None)
+    parser.add_argument("--api-key", type=str, default=None)
+    parser.add_argument("--api-key-env", type=str, default="OPENAI_API_KEY")
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--retry-delay", type=int, default=3)
@@ -118,7 +124,10 @@ def main() -> None:
         reference_file=Path(args.reference_file) if args.reference_file else None,
         student_name=args.student_name,
         runtime={
+            "provider": args.provider,
             "ollama_base_url": args.ollama_base_url,
+            "api_base_url": args.api_base_url,
+            "api_key": args.api_key or os.getenv(args.api_key_env),
             "temperature": args.temperature,
         },
         retries={
@@ -135,7 +144,10 @@ def main() -> None:
     logger = build_logger(output_dir / "pipeline.log")
 
     store = LocalFileStore()
-    llm = OllamaLangChainBackend(config)
+    if config.runtime.provider == "openai_compat":
+        llm = OpenAICompatLangChainBackend(config)
+    else:
+        llm = OllamaLangChainBackend(config)
     stt = WhisperSttBackend(config.audio) if config.mode == PipelineMode.AUDIO else None
 
     orchestrator = ManualPipelineOrchestrator(
